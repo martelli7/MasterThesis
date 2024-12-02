@@ -1,4 +1,4 @@
 # MasterThesis
-Repository of Mattia Martelli codes for its master thesis.
+This repository contains the codes used for my Master Thesis project.
 Supervisor: dott. Luca Presotto
 Second supervisor: prof. Marco Pizzichemi

@@ -5,7 +5,7 @@
  * @date   02 Dec 2024
  * @author martelli
  *
- * @brief  Simple program for opening a previous .root file
+ * @brief  Simple program for opening a previous written .root file
  */
 
 
@@ -15,8 +15,6 @@
 #include <RtypesCore.h>
 #include <TBranch.h>
 #include <TObjArray.h>
-#include "TTreeReader.h"
-#include "TTreeReaderValue.h"
 //C++
 #include <iostream>
 #include <vector>
@@ -81,6 +79,7 @@ int main (int argc, char** argv)
 
     int nBranches = branches->GetEntries(); //number of branches inside the TTree (=42)
 
+    //These variables will be filled with the branches data
     Int_t PDGEncoding, trackID, parentID,   gantryID, rsectorID, moduleID, submoduleID, crystalID, layerID, photonID, nPhantomCompton, nCrystalCompton, nCrystalRayleigh, primaryID,   sourceID, eventID, runID,   volumeID[10];
     Double_t trackLocalTime, time;
     Float_t edep, stepLength, trackLength, posX, posY, posZ, localPosX, localPosY, localPosZ, momDirX, momDirY, momDirZ,   sourcePosX, sourcePosY, sourcePosZ,   axialPos, rotationAngle;
@@ -144,7 +143,7 @@ int main (int argc, char** argv)
     tree->ResetBranchAddresses();
 
     //Debug stuff
-    cout << nBranches << endl;
+    cout << "The number of branches should be 41 and it is actually: " << nBranches << endl;
 
     //Closing and deleting
     file->Close();

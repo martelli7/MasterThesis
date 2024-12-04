@@ -5,7 +5,7 @@
  * @date   02 Dec 2024
  * @author martelli
  *
- * @brief  Simple program for opening a previous written .root file
+ * @brief  Simple program for opening a previous .root file
  */
 
 
@@ -15,6 +15,8 @@
 #include <RtypesCore.h>
 #include <TBranch.h>
 #include <TObjArray.h>
+#include "TTreeReader.h"
+#include "TTreeReaderValue.h"
 //C++
 #include <iostream>
 #include <vector>
@@ -79,11 +81,16 @@ int main (int argc, char** argv)
 
     int nBranches = branches->GetEntries(); //number of branches inside the TTree (=42)
 
-    //These variables will be filled with the branches data
     Int_t PDGEncoding, trackID, parentID,   gantryID, rsectorID, moduleID, submoduleID, crystalID, layerID, photonID, nPhantomCompton, nCrystalCompton, nCrystalRayleigh, primaryID,   sourceID, eventID, runID,   volumeID[10];
     Double_t trackLocalTime, time;
     Float_t edep, stepLength, trackLength, posX, posY, posZ, localPosX, localPosY, localPosZ, momDirX, momDirY, momDirZ,   sourcePosX, sourcePosY, sourcePosZ,   axialPos, rotationAngle;
     Char_t processName, comptVolName, RayleighVolName;
+
+    //Vectors inside which are stored the branch data
+    vector<Int_t> vPDGEncoding, vtrackID, vparentID,   vgantryID, vrsectorID, vmoduleID, vsubmoduleID, vcrystalID, vlayerID, vphotonID, vnPhantomCompton, vnCrystalCompton, vnCrystalRayleigh, vprimaryID,   vsourceID, veventID, vrunID,   vvolumeID;
+    vector<Double_t> vtrackLocalTime, vtime;
+    vector<Float_t> vedep, vstepLength, vtrackLength, vposX, vposY, vposZ, vlocalPosX, vlocalPosY, vlocalPosZ, vmomDirX, vmomDirY, vmomDirZ,   vsourcePosX, vsourcePosY, vsourcePosZ,   vaxialPos, vrotationAngle;
+    vector<Char_t> vprocessName, vcomptVolName, vRayleighVolName;
 
     tree->SetBranchAddress("PDGEncoding", &PDGEncoding);
     tree->SetBranchAddress("trackID", &trackID);
@@ -139,11 +146,64 @@ int main (int argc, char** argv)
     for (Long64_t i = 0; i < nBranches; i++)
     {
         tree->GetEntry(i); //it wants a Long64_t, returns the entries of all the branches of the i-th event
+
+        //Filling vectors
+        vPDGEncoding.push_back(PDGEncoding);
+        vtrackID.push_back(trackID);
+        vparentID.push_back(parentID);
+
+        vtrackLocalTime.push_back(trackLocalTime);
+        vtime.push_back(time);
+
+        vedep.push_back(edep);
+        vstepLength.push_back(stepLength);
+        vtrackLength.push_back(trackLength);
+        vposX.push_back(posX);
+        vposY.push_back(posY);
+        vposZ.push_back(posZ);
+        vlocalPosX.push_back(localPosX);
+        vlocalPosY.push_back(localPosY);
+        vlocalPosZ.push_back(localPosZ);
+        vmomDirX.push_back(momDirX);
+        vmomDirY.push_back(momDirY);
+        vmomDirZ.push_back(momDirZ);
+
+        vgantryID.push_back(gantryID);
+        vrsectorID.push_back(rsectorID);
+        vmoduleID.push_back(moduleID);
+        vsubmoduleID.push_back(submoduleID);
+        vcrystalID.push_back(crystalID);
+        vlayerID.push_back(layerID);
+        vphotonID.push_back(photonID);
+        vnPhantomCompton.push_back(nPhantomCompton);
+        vnCrystalCompton.push_back(nCrystalCompton);
+        vnPhantomCompton.push_back(nPhantomCompton);
+        vnCrystalRayleigh.push_back(nCrystalRayleigh);
+        vprimaryID.push_back(primaryID);
+
+        vsourcePosX.push_back(sourcePosX);
+        vsourcePosY.push_back(sourcePosY);
+        vsourcePosZ.push_back(sourcePosZ);
+
+        vsourceID.push_back(sourceID);
+        veventID.push_back(eventID);
+        vrunID.push_back(runID);
+
+        vaxialPos.push_back(axialPos);
+        vrotationAngle.push_back(rotationAngle);
+        for (int j = 0; j < 10 ;j++)
+        {
+            vvolumeID.push_back(volumeID[j]);
+        }
+
+        vprocessName.push_back(processName);
+        vcomptVolName.push_back(comptVolName);
+        vRayleighVolName.push_back(RayleighVolName);
     }
     tree->ResetBranchAddresses();
 
     //Debug stuff
-    cout << "The number of branches should be 41 and it is actually: " << nBranches << endl;
+    cout << nBranches << endl;
 
     //Closing and deleting
     file->Close();

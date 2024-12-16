@@ -53,12 +53,12 @@ int main()
     //.Filter()   //possibile concatenare più filtri
     //.Count();   //Count() non funziona usando anche Snapshot()
     .Snapshot("filteredHits", "filtered_file3.root", {"posX", "posY", "posZ", "photonID", "eventID", "parentID", "nCrystalCompton"});
-    //il metodo Snapshot() crea un nuovo file con i filtri e le colonne selezionate, ora il file è molto leggero
+    // il metodo Snapshot() crea un nuovo file con i filtri e le colonne selezionate, ora il file è più leggero!
 
-    //controlla quante entrate hanno superato il filto
+    // controlla quante entrate hanno superato il filto
     //std::cout << *df_filtered << " entries passed all filters" << std::endl;
 
-    // Histo2D posX:posY
+    // Histo2D posX:posY -> funziona!
     /*auto myHist1 = df.Histo2D({"histName", "posX:posY{nCrystalCompton==1}", 64u, -150., 150., 32u, -150., 150.}, "posX", "posY");
      *
      *    TCanvas c;

@@ -96,7 +96,7 @@ int main()
     std::unique_ptr<TFile> myFile( TFile::Open("filtered_file_photon1.root") );
     auto tree = myFile->Get<TTree>("filteredHits");
 
-    //std::vector<Float_t> posX, posY, posZ;
+    //std::vector<Float_t> posX, posY, posZ; //non posso dichiararli vector perché SetBranchAddress vuole il tipo esatto di variabile (non vector)
     //Float_t posX[10], posY[10], posZ[10];
     Float_t *posX, *posY, *posZ;
     Int_t *photonID, *eventID;

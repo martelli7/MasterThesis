@@ -57,35 +57,35 @@
 int main()
 {
     /*
-     *    ROOT::EnableImplicitMT(); // multi-threading
-     *
-     *    auto fileName = "Tesi_NN_0.root";
-     *    auto treeName = "Hits;-32768";
-     *
-     *    // apriamo il RootDataFrame
-     *    ROOT::RDataFrame df(treeName, fileName);
-     *
-     *
-     *
-     *    // Filtering
-     *    auto df_filtered = df.Filter("nCrystalCompton == 1", "Events with just 1 Compton Scattering")
-     *    .Filter("parentID==0","Photons which are not daughters") //domanda: gli eventi con parentID = 2,3,4 cosa sono...?
-     *    .Filter("posX!=0 && posY!=0 && posZ!=0", "Events with photons")
-     *    //.Filter("photonID==1","Select the first photon only")
-     *    //.Filter()   //possibile concatenare più filtri
-     *    //.Count();   //Count() non funziona usando anche Snapshot()
-     *    .Snapshot("filteredHits", "filtered_file3.root", {"posX", "posY", "posZ", "photonID", "eventID", "parentID", "nCrystalCompton"});
-     *    //il metodo Snapshot() crea un nuovo file con i filtri e le colonne selezionate, ora il file è molto leggero
-     *
-     *    //controlla quante entrate hanno superato il filto
-     *    //std::cout << *df_filtered << " entries passed all filters" << std::endl;
-     *
-     *    // Histo2D posX:posY -> funziona!
-     *    /*auto myHist1 = df.Histo2D({"histName", "posX:posY{nCrystalCompton==1}", 64u, -150., 150., 32u, -150., 150.}, "posX", "posY");
-     *
-     *    TCanvas c;
-     *    myHist1->Draw("COLZ"); //scala a colori
-     *    c.SaveAs("posXposY.root");
+         ROOT::EnableImplicitMT(); // multi-threading
+
+         auto fileName = "Tesi_NN_0.root";
+         auto treeName = "Hits;-32768";
+
+         // apriamo il RootDataFrame
+         ROOT::RDataFrame df(treeName, fileName);
+
+
+
+        // Filtering
+        auto df_filtered = df.Filter("nCrystalCompton == 1", "Events with just 1 Compton Scattering")
+         .Filter("parentID==0","Photons which are not daughters") //domanda: gli eventi con parentID = 2,3,4 cosa sono...?
+         .Filter("posX!=0 && posY!=0 && posZ!=0", "Events with photons")
+         //.Filter("photonID==1","Select the first photon only")
+         //.Filter()   //possibile concatenare più filtri
+         //.Count();   //Count() non funziona usando anche Snapshot()
+         .Snapshot("filteredHits", "filtered_file3.root", {"posX", "posY", "posZ", "photonID", "eventID", "parentID", "nCrystalCompton"});
+         //il metodo Snapshot() crea un nuovo file con i filtri e le colonne selezionate, ora il file è molto leggero
+
+         //controlla quante entrate hanno superato il filto
+         //std::cout << *df_filtered << " entries passed all filters" << std::endl;
+
+         // Histo2D posX:posY -> funziona!
+         /*auto myHist1 = df.Histo2D({"histName", "posX:posY{nCrystalCompton==1}", 64u, -150., 150., 32u, -150., 150.}, "posX", "posY");
+
+         TCanvas c;
+         myHist1->Draw("COLZ"); //scala a colori
+         c.SaveAs("posXposY.root");
      */
 
      //----------------------------------------------------------//

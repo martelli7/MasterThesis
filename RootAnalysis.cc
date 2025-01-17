@@ -127,12 +127,6 @@ int main()
     Long64_t iEntry2 = 0;
     Long64_t iEntry3 = 0;
 
-    Long64_t interval0 = 0; //1-2
-    Long64_t interval1 = 0; //3-5
-    Long64_t interval2 = 0; //5-8
-    Long64_t interval3 = 0; //8-12
-    Long64_t interval4 = 0; //12-16
-
     Float_t dx1, dy1, dz1, dx2, dy2, dz2;
     Int_t dxc1, dxc2, dyc1, dyc2;
     Float_t distance, crydistance;
@@ -142,7 +136,7 @@ int main()
     TH1D *hDistanceCrystal = new TH1D("hDistanceCrystal", "Crystal Scattering Distance;Distance [crystals];Counts", 1000, 0, 30);
     TH1D *hDistanceZ = new TH1D("hDistanceZ", "Scattering Distance along z-axis;Distance [mm];Counts", 1000, 0, 30);
 
-    TH2D *hScatterEnergy = new TH2D("hScatterEnergy", "crystalID vs 1st Photon Energy[MeV]", 4, 0, 16, 1000, 0, 1);
+    TH2D *hScatterEnergy = new TH2D("hScatterEnergy", "Distance[mm] vs 1st Photon Energy[keV]", 80, 0, 40, 17, 0, 511);
 
     //for (Long64_t iEntry = 0; iEntry < nEntries; ++iEntry)
     while (iEntry < nEntries)
@@ -156,7 +150,7 @@ int main()
             myposX[0] = posX;
             myposY[0] = posY;
             myposZ[0] = posZ;
-            myedep[0] = edep;
+            myedep[0] = edep*1000; // Mev-->keV
             myphotonID[0] = photonID;
             myeventID[0] = eventID;
             mycrystalID[0] = crystalID;
@@ -170,7 +164,7 @@ int main()
             myposX[1] = posX;
             myposY[1] = posY;
             myposZ[1] = posZ;
-            myedep[1] = edep;
+            myedep[1] = edep*1000;
             myphotonID[1] = photonID;
             myeventID[1] = eventID;
             mycrystalID[1] = crystalID;
@@ -181,7 +175,7 @@ int main()
             myposX[2] = posX;
             myposY[2] = posY;
             myposZ[2] = posZ;
-            myedep[2] = edep;
+            myedep[2] = edep*1000;
             myphotonID[2] = photonID;
             myeventID[2] = eventID;
             mycrystalID[2] = crystalID;
@@ -225,7 +219,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
-                    hScatterEnergy->Fill(mycrystalID[0], myedep[0]);
+                    hScatterEnergy->Fill(distance, myedep[0]);
                 }
                 // Second couple condition
                 else if(dz2 > 3)
@@ -241,7 +235,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
-                    hScatterEnergy->Fill(mycrystalID[1], myedep[1]);
+                    hScatterEnergy->Fill(distance, myedep[1]);
                 }
                 // Now we skip the following 4th event (3 events processed in one time)
                 iEntry = iEntry+3;
@@ -274,7 +268,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
-                    hScatterEnergy->Fill(mycrystalID[0], myedep[0]);
+                    hScatterEnergy->Fill(distance, myedep[0]);
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;
@@ -305,7 +299,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
-                    hScatterEnergy->Fill(mycrystalID[1], myedep[1]);
+                    hScatterEnergy->Fill(distance, myedep[1]);
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;

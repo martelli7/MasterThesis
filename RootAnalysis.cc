@@ -59,23 +59,23 @@ int main()
 
     ROOT::EnableImplicitMT(); // multi-threading
 
-    auto fileName = "Tesi_NN_0.root";
-    auto treeName = "Hits;-32768";
-
-    // apriamo il RootDataFrame
-    ROOT::RDataFrame df(treeName, fileName);
-
-
-
-    // Filtering
-    auto df_filtered = df.Filter("nCrystalCompton == 1", "Events with just 1 Compton Scattering")
-    .Filter("parentID==0","Photons which are not daughters")
-    .Filter("posX!=0 && posY!=0 && posZ!=0", "Events with photons")
-    //.Filter("photonID==1","Select the first photon only")
-    //.Filter()   //possibile concatenare più filtri
-    //.Count();   //Count() non funziona usando anche Snapshot()
-    .Snapshot("filteredHits", "filtered_file2.root", {"posX", "posY", "posZ", "edep", "photonID", "eventID", "parentID", "crystalID", "nCrystalCompton"});
-    //il metodo Snapshot() crea un nuovo file con i filtri e le colonne selezionate, ora il file è molto leggero
+    // auto fileName = "Tesi_NN_0.root";
+    // auto treeName = "Hits;-32768";
+    //
+    // // apriamo il RootDataFrame
+    // ROOT::RDataFrame df(treeName, fileName);
+    //
+    //
+    //
+    // // Filtering
+    // auto df_filtered = df.Filter("nCrystalCompton == 1", "Events with just 1 Compton Scattering")
+    // .Filter("parentID==0","Photons which are not daughters")
+    // .Filter("posX!=0 && posY!=0 && posZ!=0", "Events with photons")
+    // //.Filter("photonID==1","Select the first photon only")
+    // //.Filter()   //possibile concatenare più filtri
+    // //.Count();   //Count() non funziona usando anche Snapshot()
+    // .Snapshot("filteredHits", "filtered_file2.root", {"posX", "posY", "posZ", "edep", "photonID", "eventID", "parentID", "crystalID", "nCrystalCompton"});
+    // //il metodo Snapshot() crea un nuovo file con i filtri e le colonne selezionate, ora il file è molto leggero
 
     //controlla quante entrate hanno superato il filto
     //std::cout << *df_filtered << " entries passed all filters" << std::endl;
@@ -127,6 +127,7 @@ int main()
     Long64_t iEntry2 = 0;
     Long64_t iEntry3 = 0;
 
+    Long64_t interval0 = 0; //1-2
     Long64_t interval1 = 0; //3-5
     Long64_t interval2 = 0; //5-8
     Long64_t interval3 = 0; //8-12
@@ -140,6 +141,8 @@ int main()
     TH1D *hDistanceScattering = new TH1D("hDistanceScattering", "Scattering Distance;Distance [mm];Counts", 1000, 0, 30);
     TH1D *hDistanceCrystal = new TH1D("hDistanceCrystal", "Crystal Scattering Distance;Distance [crystals];Counts", 1000, 0, 30);
     TH1D *hDistanceZ = new TH1D("hDistanceZ", "Scattering Distance along z-axis;Distance [mm];Counts", 1000, 0, 30);
+
+    TH2D *hScatterEnergy = new TH2D("hScatterEnergy", "crystalID vs 1st Photon Energy[MeV]", 4, 0, 16, 1000, 0, 1);
 
     //for (Long64_t iEntry = 0; iEntry < nEntries; ++iEntry)
     while (iEntry < nEntries)
@@ -222,6 +225,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
+                    hScatterEnergy->Fill(mycrystalID[0], myedep[0]);
                 }
                 // Second couple condition
                 else if(dz2 > 3)
@@ -237,6 +241,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
+                    hScatterEnergy->Fill(mycrystalID[1], myedep[1]);
                 }
                 // Now we skip the following 4th event (3 events processed in one time)
                 iEntry = iEntry+3;
@@ -269,6 +274,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
+                    hScatterEnergy->Fill(mycrystalID[0], myedep[0]);
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;
@@ -299,6 +305,7 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
+                    hScatterEnergy->Fill(mycrystalID[1], myedep[1]);
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;
@@ -314,20 +321,25 @@ int main()
         }
     } //close while
 
-    TCanvas c1;
-    hDistanceScattering->Draw();
-    c1.SaveAs("distanceScatteringPhotons2.root");
-    c1.SaveAs("distanceScatteringPhotons2.png");
+    // TCanvas c1;
+    // hDistanceScattering->Draw();
+    // c1.SaveAs("distanceScatteringPhotons2.root");
+    // c1.SaveAs("distanceScatteringPhotons2.png");
+    //
+    // TCanvas c2;
+    // hDistanceCrystal->Draw();
+    // c2.SaveAs("distanceCrystalScattering2.root");
+    // c2.SaveAs("distanceCrystalScattering2.png");
+    //
+    // TCanvas c3;
+    // hDistanceZ->Draw();
+    // c3.SaveAs("distanceScatteringZ2.root");
+    // c3.SaveAs("distanceScatteringZ2.png");
 
-    TCanvas c2;
-    hDistanceCrystal->Draw();
-    c2.SaveAs("distanceCrystalScattering2.root");
-    c2.SaveAs("distanceCrystalScattering2.png");
-
-    TCanvas c3;
-    hDistanceZ->Draw();
-    c3.SaveAs("distanceScatteringZ2.root");
-    c3.SaveAs("distanceScatteringZ2.png");
+    TCanvas c4;
+    hScatterEnergy->Draw("colz");
+    c4.SaveAs("scatterEnergy.root");
+    c4.SaveAs("scatterEnergy.png");
 
     return 0;
 }

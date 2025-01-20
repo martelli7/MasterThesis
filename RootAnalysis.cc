@@ -1,8 +1,8 @@
-// $Id: RootAnalysis.cc 4 2025-1-16 martelli $
+// $Id: RootAnalysis.cc 4 2025-1-20 martelli $
 /**
  * @file   RootAnalysis.cc
  *
- * @date   16 Jan 2025
+ * @date   20 Jan 2025
  * @author martelli
  *
  * @brief  Simple program for opening a previous .root file
@@ -129,14 +129,15 @@ int main()
 
     Float_t dx1, dy1, dz1, dx2, dy2, dz2;
     Int_t dxc1, dxc2, dyc1, dyc2;
-    Float_t distance, crydistance;
+    Float_t distance, distanceXY, crydistance;
 
     // Histograms
     TH1D *hDistanceScattering = new TH1D("hDistanceScattering", "Scattering Distance;Distance [mm];Counts", 1000, 0, 30);
     TH1D *hDistanceCrystal = new TH1D("hDistanceCrystal", "Crystal Scattering Distance;Distance [crystals];Counts", 1000, 0, 30);
     TH1D *hDistanceZ = new TH1D("hDistanceZ", "Scattering Distance along z-axis;Distance [mm];Counts", 1000, 0, 30);
 
-    TH2D *hScatterEnergy = new TH2D("hScatterEnergy", "Distance[mm] vs 1st Photon Energy[keV]", 80, 0, 40, 17, 0, 511);
+    TH2D *hScatterEnergy = new TH2D("hScatterEnergy", "XY-Distance[mm] vs 1st Photon Energy[keV]", 80, 0, 40, 17, 0, 511);
+    TH2D *hScatterEnergyZ = new TH2D("hScatterEnergyZ", "#DeltaZ[mm] vs 1st Photon Energy[keV]", 5, 0, 15, 17, 0, 511);
 
     //for (Long64_t iEntry = 0; iEntry < nEntries; ++iEntry)
     while (iEntry < nEntries)
@@ -209,6 +210,7 @@ int main()
                 if(dx1 < 30 && dz1 > 3)
                 {
                     distance = TMath::Sqrt(dx1 * dx1 + dy1 * dy1 + dz1 * dz1);
+                    distanceXY = TMath::Sqrt(dx1 * dx1 + dy1 * dy1);
 
                     crydistance = TMath::Sqrt(dxc1*dxc1 + dyc1*dyc1);
 
@@ -219,12 +221,14 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
-                    hScatterEnergy->Fill(distance, myedep[0]);
+                    hScatterEnergy->Fill(distanceXY, myedep[0]);
+                    hScatterEnergyZ->Fill(dz1, myedep[0]);
                 }
                 // Second couple condition
                 else if(dz2 > 3)
                 {
                     distance = TMath::Sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
+                    distanceXY = TMath::Sqrt(dx2 * dx2 + dy2 * dy2);
 
                     crydistance = TMath::Sqrt(dxc2*dxc2 + dyc2*dyc2);
 
@@ -235,7 +239,8 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
-                    hScatterEnergy->Fill(distance, myedep[1]);
+                    hScatterEnergy->Fill(distanceXY, myedep[1]);
+                    hScatterEnergyZ->Fill(dz2, myedep[1]);
                 }
                 // Now we skip the following 4th event (3 events processed in one time)
                 iEntry = iEntry+3;
@@ -260,6 +265,7 @@ int main()
                 if(dx1 < 30 && dz1 > 3)
                 {
                     distance = TMath::Sqrt(dx1 * dx1 + dy1 * dy1 + dz1 * dz1);
+                    distanceXY = TMath::Sqrt(dx1 * dx1 + dy1 * dy1);
 
                     // Display some outputs...
                     //std::cout << myphotonID[i] << ", " << i << ", "<< myeventID[i] << ", (" << dx1 << "," << dy1 << "," << dz1 << ")"<< std::endl;
@@ -268,7 +274,8 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
-                    hScatterEnergy->Fill(distance, myedep[0]);
+                    hScatterEnergy->Fill(distanceXY, myedep[0]);
+                    hScatterEnergyZ->Fill(dz1, myedep[0]);
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;
@@ -289,6 +296,7 @@ int main()
                 if (dx2 < 30 && dz2 > 3)
                 {
                     distance = TMath::Sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
+                    distanceXY = TMath::Sqrt(dx2 * dx2 + dy2 * dy2);
 
                     crydistance = TMath::Sqrt(dxc2*dxc2 + dyc2*dyc2);
 
@@ -299,7 +307,8 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
-                    hScatterEnergy->Fill(distance, myedep[1]);
+                    hScatterEnergy->Fill(distanceXY, myedep[1]);
+                    hScatterEnergyZ->Fill(dz2, myedep[1]);
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;
@@ -334,6 +343,11 @@ int main()
     hScatterEnergy->Draw("colz");
     c4.SaveAs("scatterEnergy.root");
     c4.SaveAs("scatterEnergy.png");
+
+    TCanvas c5;
+    hScatterEnergyZ->Draw("colz");
+    c5.SaveAs("ScatterEnergyZ.root");
+    c5.SaveAs("ScatterEnergyZ.png");
 
     return 0;
 }

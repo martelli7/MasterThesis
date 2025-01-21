@@ -74,7 +74,7 @@ int main()
     // //.Filter("photonID==1","Select the first photon only")
     // //.Filter()   //possibile concatenare più filtri
     // //.Count();   //Count() non funziona usando anche Snapshot()
-    // .Snapshot("filteredHits", "filtered_file2.root", {"posX", "posY", "posZ", "edep", "photonID", "eventID", "parentID", "crystalID", "nCrystalCompton"});
+    // .Snapshot("filteredHits", "root/filtered_file2.root", {"posX", "posY", "posZ", "edep", "photonID", "eventID", "parentID", "crystalID", "nCrystalCompton"});
     // //il metodo Snapshot() crea un nuovo file con i filtri e le colonne selezionate, ora il file è molto leggero
 
     //controlla quante entrate hanno superato il filto
@@ -136,8 +136,12 @@ int main()
     TH1D *hDistanceCrystal = new TH1D("hDistanceCrystal", "Crystal Scattering Distance;Distance [crystals];Counts", 1000, 0, 30);
     TH1D *hDistanceZ = new TH1D("hDistanceZ", "Scattering Distance along z-axis;Distance [mm];Counts", 1000, 0, 30);
 
-    TH2D *hScatterEnergy = new TH2D("hScatterEnergy", "XY-Distance[mm] vs 1st Photon Energy[keV]", 80, 0, 40, 17, 0, 511);
-    TH2D *hScatterEnergyZ = new TH2D("hScatterEnergyZ", "#DeltaZ[mm] vs 1st Photon Energy[keV]", 5, 0, 15, 17, 0, 511);
+    TH2D *hScatterEnergy1 = new TH2D("hScatterEnergy1", "#Deltaz = [3#;6)mm;xy-distance[mm];Energy[keV]", 80, 0, 40, 17, 0, 511);
+    TH2D *hScatterEnergy2 = new TH2D("hScatterEnergy2", "#Deltaz = [6#;9)mm;xy-distance[mm];Energy[keV]", 80, 0, 40, 17, 0, 511);
+    TH2D *hScatterEnergy3 = new TH2D("hScatterEnergy3", "#Deltaz = [9#;12)mm;xy-distance[mm];Energy[keV]", 80, 0, 40, 17, 0, 511);
+    TH2D *hScatterEnergy4 = new TH2D("hScatterEnergy4", "#Deltaz = [12#;15)mm;xy-distance[mm];Energy[keV]", 80, 0, 40, 17, 0, 511);
+
+    //TH2D *hScatterEnergyZ = new TH2D("hScatterEnergyZ", "#DeltaZ[mm] vs 1st Photon Energy[keV]", 5, 0, 15, 17, 0, 511);
 
     //for (Long64_t iEntry = 0; iEntry < nEntries; ++iEntry)
     while (iEntry < nEntries)
@@ -221,8 +225,23 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
-                    hScatterEnergy->Fill(distanceXY, myedep[0]);
-                    hScatterEnergyZ->Fill(dz1, myedep[0]);
+
+                    if(dz1 >= 3 && dz1 < 6)
+                    {
+                        hScatterEnergy1->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz1 >= 6 && dz1 < 9)
+                    {
+                        hScatterEnergy2->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz1 >= 9 && dz1 < 12)
+                    {
+                        hScatterEnergy3->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz1 >= 12 && dz1 < 15)
+                    {
+                        hScatterEnergy4->Fill(distanceXY, myedep[0]);
+                    }
                 }
                 // Second couple condition
                 else if(dz2 > 3)
@@ -239,8 +258,23 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
-                    hScatterEnergy->Fill(distanceXY, myedep[1]);
-                    hScatterEnergyZ->Fill(dz2, myedep[1]);
+
+                    if(dz2 >= 3 && dz2 < 6)
+                    {
+                        hScatterEnergy1->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz2 >= 6 && dz2 < 9)
+                    {
+                        hScatterEnergy2->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz2 >= 9 && dz2 < 12)
+                    {
+                        hScatterEnergy3->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz2 >= 12 && dz2 < 15)
+                    {
+                        hScatterEnergy4->Fill(distanceXY, myedep[0]);
+                    }
                 }
                 // Now we skip the following 4th event (3 events processed in one time)
                 iEntry = iEntry+3;
@@ -274,8 +308,23 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz1);
-                    hScatterEnergy->Fill(distanceXY, myedep[0]);
-                    hScatterEnergyZ->Fill(dz1, myedep[0]);
+
+                    if(dz1 >= 3 && dz1 < 6)
+                    {
+                        hScatterEnergy1->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz1 >= 6 && dz1 < 9)
+                    {
+                        hScatterEnergy2->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz1 >= 9 && dz1 < 12)
+                    {
+                        hScatterEnergy3->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz1 >= 12 && dz1 < 15)
+                    {
+                        hScatterEnergy4->Fill(distanceXY, myedep[0]);
+                    }
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;
@@ -307,8 +356,23 @@ int main()
                     hDistanceScattering->Fill(distance);
                     hDistanceCrystal->Fill(crydistance);
                     hDistanceZ->Fill(dz2);
-                    hScatterEnergy->Fill(distanceXY, myedep[1]);
-                    hScatterEnergyZ->Fill(dz2, myedep[1]);
+
+                    if(dz2 >= 3 && dz2 < 6)
+                    {
+                        hScatterEnergy1->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz2 >= 6 && dz2 < 9)
+                    {
+                        hScatterEnergy2->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz2 >= 9 && dz2 < 12)
+                    {
+                        hScatterEnergy3->Fill(distanceXY, myedep[0]);
+                    }
+                    else if (dz2 >= 12 && dz2 < 15)
+                    {
+                        hScatterEnergy4->Fill(distanceXY, myedep[0]);
+                    }
                 }
                 // Now we skip to the 3rd event (2 events processed in one time)
                 iEntry = iEntry+2;
@@ -324,30 +388,57 @@ int main()
         }
     } //close while
 
-    // TCanvas c1;
-    // hDistanceScattering->Draw();
-    // c1.SaveAs("distanceScatteringPhotons2.root");
-    // c1.SaveAs("distanceScatteringPhotons2.png");
-    //
-    // TCanvas c2;
-    // hDistanceCrystal->Draw();
-    // c2.SaveAs("distanceCrystalScattering2.root");
-    // c2.SaveAs("distanceCrystalScattering2.png");
-    //
-    // TCanvas c3;
-    // hDistanceZ->Draw();
-    // c3.SaveAs("distanceScatteringZ2.root");
-    // c3.SaveAs("distanceScatteringZ2.png");
+    // Save root and png files
 
-    TCanvas c4;
-    hScatterEnergy->Draw("colz");
-    c4.SaveAs("scatterEnergy.root");
-    c4.SaveAs("scatterEnergy.png");
+    TFile *f = new TFile("root/histograms.root", "RECREATE");
+    f->cd();
 
-    TCanvas c5;
-    hScatterEnergyZ->Draw("colz");
-    c5.SaveAs("ScatterEnergyZ.root");
-    c5.SaveAs("ScatterEnergyZ.png");
+    hScatterEnergy1->SetOption("colz");
+    hScatterEnergy2->SetOption("colz");
+    hScatterEnergy3->SetOption("colz");
+    hScatterEnergy4->SetOption("colz");
+
+    hDistanceScattering->Write("hDistanceScattering");
+    hDistanceCrystal->Write("hDistanceCrystal");
+    hDistanceZ->Write("hDistanceZ");
+
+    hScatterEnergy1->Write("hScatterEnergy1");
+    hScatterEnergy2->Write("hScatterEnergy2");
+    hScatterEnergy3->Write("hScatterEnergy3");
+    hScatterEnergy4->Write("hScatterEnergy4");
+
+    f->Close();
+
+    TCanvas c1;
+    c1.Clear();
+
+    hDistanceScattering->Draw();
+    c1.SaveAs("png/hDistanceScattering.png");
+    c1.Clear();
+
+    hDistanceCrystal->Draw();
+    c1.SaveAs("png/hDistanceCrystal.png");
+    c1.Clear();
+
+    hDistanceZ->Draw();
+    c1.SaveAs("png/hDistanceZ.png");
+    c1.Clear();
+
+    hScatterEnergy1->Draw("colz");
+    c1.SaveAs("png/hScatterEnergy1.png");
+    c1.Clear();
+
+    hScatterEnergy2->Draw("colz");
+    c1.SaveAs("png/hScatterEnergy2.png");
+    c1.Clear();
+
+    hScatterEnergy3->Draw("colz");
+    c1.SaveAs("png/hScatterEnergy3.png");
+    c1.Clear();
+
+    hScatterEnergy4->Draw("colz");
+    c1.SaveAs("png/hScatterEnergy4.png");
+    c1.Clear();
 
     return 0;
 }

@@ -1,4 +1,4 @@
-// $Id: Analysis.hh 1 2025-3-3 martelli $
+// $Id: Analysis.hh 6 2025-3-15 martelli $
 /**
  * @file
  * @brief Analysis
@@ -11,6 +11,7 @@
  *      Author: adotti
  */
 
+#include <cstddef>
 #ifndef ANALYSIS_HH
 #define ANALYSIS_HH 1
 
@@ -53,7 +54,6 @@ class TFile;
 class Analysis {
 
 public:
-    // static Analysis* GetInstance(); //use it to access to the analysis class
 
     Analysis(bool &filter, bool &analyze, bool &scatterHisto, bool &scatterEnergy, bool &axisCone); //constructor
 
@@ -66,21 +66,23 @@ public:
     void Analyze(const char* filteredFileName, const char* filteredTreeName);
 
 private:
-    // static Analysis* singleton;
 
     // this function takes in the energy deposit by the scattered 511 and returns its scatter angle by reversing Compton formula
-    double scatterAngle (float &energydeposit);
+    float betaAngle (float &energydeposit, int &count1, int &count2, int &count3, int &countNaN);
 
+    // It returns the norm of a vector
+    float norm (float &x1, float &y1, float &z1);
+
+    float thetaAngle (float &x1, float &y1, float &z1, float &x2, float &y2, float &z2, float &norm1);
+
+    // SIGMA
     // this function takes in dx and dy and returns the sigma of the Theta Angle defined between the Y' local axis and the Cone Axis (delta vector)
     float sigmaThetaCone (float &dx, float &dy);
 
     float sigmaPhiCone (float &dx, float &dy, float &dz);
 
-    // It returns the norm of a vector
-    float norm (float &x1, float &y1, float &z1);
 
-    float thetaAngle(float &x1, float &y1, float &z1, float &x2, float &y2, float &z2, float &norm1);
-
+    void thisEvent(float &x1, float &y1, float &z1, float &x2, float &y2, float &z2, float &locx1, float &locy1, float &locz1, float &locx2, float &locy2, float &locz2, float &edep1, float &edep2, int &crysID1, int &crysID2, int &count1, int &count2, int &count3, int &countNaN, int &countDiff);
 
     // Booleans
     bool doFilter, doAnalyze, doScatterHisto, doScatterEnergy, doAxisCone;
@@ -102,49 +104,52 @@ private:
     int nCrystalRayleigh;
 
     // My arrays
-    float *myposX = new float[3];
-    float *myposY = new float[3];
-    float *myposZ = new float[3];
-    float *mylocalPosX = new float[3];
-    float *mylocalPosY = new float[3];
-    float *mylocalPosZ = new float[3];
-    float *myedep = new float[3];
+    float *myposX;
+    float *myposY;
+    float *myposZ;
+    float *mylocalPosX;
+    float *mylocalPosY;
+    float *mylocalPosZ;
+    float *myedep;
 
-    int *myphotonID = new int[3];
-    int *myeventID = new int[3];
-    int *mycrystalID = new int[3];
-    int *myrsectorID = new int[3];
-    int *mynCrystalCompton = new int[3];
-    int *mynCrystalRayleigh = new int[3];
+    int *myphotonID;
+    int *myeventID;
+    int *mycrystalID;
+    int *myrsectorID;
+    int *mynCrystalCompton;
+    int *mynCrystalRayleigh;
 
-    // Variables
+    // Counters
     Long64_t iEntry;
     Long64_t iEntry2;
     Long64_t iEntry3;
 
-    float dx1, dy1, dz1, dx2, dy2, dz2;
-    float dx1abs, dy1abs, dz1abs, dx2abs, dy2abs, dz2abs, dx1local, dx2local;
-    int dxc1, dxc2, dyc1, dyc2;
-    float distance, distanceXY, crydistance, distance1;        // distance is the norm of the DELTA VECTOR
-    double sAngle;
-    double thetaCone, alfaCone, thetaSigmaCone, alfaSigmaCone;
-
     // ROOT objects
     TFile *f;
 
-    TH1D *hDistanceScattering;
-    TH1D *hDistanceCrystal;
-    TH1D *hDistanceZ;
-    TH1D *hScatterAngle;
+    // ROOT objects
+    TH1D *hDistanceScattering = nullptr;
+    TH1D *hDistanceCrystal = nullptr;
+    TH1D *hDistanceZ = nullptr;
+    TH1D *hBetaAngle = nullptr;
 
-    TH2D *hScatterEnergy0;
-    TH2D *hScatterEnergy1;
-    TH2D *hScatterEnergy2;
-    TH2D *hScatterEnergy3;
-    TH2D *hScatterEnergy4;
+    TH2D *hScatterEnergy0 = nullptr;
+    TH2D *hScatterEnergy1 = nullptr;
+    TH2D *hScatterEnergy2 = nullptr;
+    TH2D *hScatterEnergy3 = nullptr;
+    TH2D *hScatterEnergy4 = nullptr;
 
-    TH2D *hAxisCone;
-    TH2D *hAxisCone1;
+    TH2D *hAxisThetaPhi = nullptr;
+    TH2D *hAxisBetaPhi = nullptr;
+    TH2D *hAxisBetaTheta = nullptr;
+    TH1D *hAxisDifference = nullptr;
+    TH1D *hThetaAngle = nullptr;
+    TH1D *hPhiAngle = nullptr;
+
+    TH1D *hEnergy0 =  nullptr;
+    TH1D *hEnergy1 =  nullptr;
+    TH1D *hEnergy2 =  nullptr;
+    TH1D *hEnergy3 =  nullptr;
 
 };
 

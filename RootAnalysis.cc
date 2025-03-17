@@ -43,53 +43,53 @@
 // tree->Draw("posX:posY","nCrystalCompton==1 & eventID==137","colz");
 
 /*const std::vector<Float_t>& posX,
-const std::vector<Float_t>& posY,
-const std::vector<Float_t>& posZ) {
-
-root [6]  tree->Scan("eventID:rsectorID:photonID:nCrystalCompton:nCrystalRayleigh:posX")
-************************************************************************************
-*    Row   *   eventID * rsectorID *  photonID * nCrystalC * nCrystalR *      posX *
-************************************************************************************
-*        0 *         4 *         4 *         2 *         1 *         0 * -33.72324 *
-*        1 *         4 *         4 *         2 *         1 *         0 * -33.86138 *
-unica coppia compton
-
-*        2 *        16 *        10 *         1 *         0 *         0 * 58.599784 *
-*        3 *        16 *         4 *         2 *         0 *         1 * -56.17806 *
-*        4 *        16 *         4 *         2 *         1 *         1 * -60.42935 *
-*        5 *        16 *         4 *         2 *         2 *         1 * -63.02994 *
-*        6 *        16 *         4 *         2 *         2 *         1 * -64.34118 *
-fotoelettrico + righe 3,4 -> rayleigh, righe 4,5 -> primo compton, righe 5,6 -> secondo compton
-
-*        7 *        17 *         8 *         1 *         1 *         0 * -56.12685 *
-*        8 *        17 *         8 *         1 *         1 *         0 * -56.98064 *
-*        9 *        17 *         2 *         2 *         0 *         0 * 58.198852 *
-unica coppia compton + fotoelettrico
-
-*       10 *        22 *         8 *         1 *         1 *         0 * -31.88264 *
-*       11 *        22 *         8 *         1 *         2 *         0 * -32.00119 *
-*       12 *        22 *         8 *         1 *         3 *         0 * -39.27561 *
-*       13 *        22 *         8 *         1 *         3 *         0 * -38.80887 *
-*       14 *        22 *         2 *         2 *         1 *         0 * 30.226743 *
-
-*       15 *        24 *         0 *         2 *         1 *         0 * 105.85574 *
-*       16 *        24 *         0 *         2 *         1 *         0 * 107.73904 *
-unica coppia compton
-
-*       17 *        25 *         1 *         1 *         1 *         0 * 93.452529 *
-*       18 *        25 *         1 *         1 *         1 *         1 * 93.679504 *
-*       19 *        25 *         1 *         1 *         1 *         2 * 93.836738 *
-*       20 *        25 *         7 *         2 *         0 *         1 * -93.80313 *
-*       21 *        25 *         7 *         2 *         0 *         1 * -96.04290 *
-
-*       22 *        27 *         8 *         1 *         0 *         1 * -34.67410 *
-
-*       23 *        30 *         3 *         1 *         1 *         0 * -21.99345 *
-*       24 *        30 *         3 *         1 *         2 *         0 * -21.85355 *
-*       25 *        30 *         3 *         1 *         2 *         0 * -21.34117 *
-*       26 *        30 *         9 *         2 *         0 *         0 *  22.45331 *
-
-*/
+ * const std::vector<Float_t>& posY,
+ * const std::vector<Float_t>& posZ) {
+ *
+ * root [6]  tree->Scan("eventID:rsectorID:photonID:nCrystalCompton:nCrystalRayleigh:posX")
+ ************************************************************************************
+ *    Row   *   eventID * rsectorID *  photonID * nCrystalC * nCrystalR *      posX *
+ ************************************************************************************
+ *        0 *         4 *         4 *         2 *         1 *         0 * -33.72324 *
+ *        1 *         4 *         4 *         2 *         1 *         0 * -33.86138 *
+ * unica coppia compton
+ *
+ *        2 *        16 *        10 *         1 *         0 *         0 * 58.599784 *
+ *        3 *        16 *         4 *         2 *         0 *         1 * -56.17806 *
+ *        4 *        16 *         4 *         2 *         1 *         1 * -60.42935 *
+ *        5 *        16 *         4 *         2 *         2 *         1 * -63.02994 *
+ *        6 *        16 *         4 *         2 *         2 *         1 * -64.34118 *
+ * fotoelettrico + righe 3,4 -> rayleigh, righe 4,5 -> primo compton, righe 5,6 -> secondo compton
+ *
+ *        7 *        17 *         8 *         1 *         1 *         0 * -56.12685 *
+ *        8 *        17 *         8 *         1 *         1 *         0 * -56.98064 *
+ *        9 *        17 *         2 *         2 *         0 *         0 * 58.198852 *
+ * unica coppia compton + fotoelettrico
+ *
+ *       10 *        22 *         8 *         1 *         1 *         0 * -31.88264 *
+ *       11 *        22 *         8 *         1 *         2 *         0 * -32.00119 *
+ *       12 *        22 *         8 *         1 *         3 *         0 * -39.27561 *
+ *       13 *        22 *         8 *         1 *         3 *         0 * -38.80887 *
+ *       14 *        22 *         2 *         2 *         1 *         0 * 30.226743 *
+ *
+ *       15 *        24 *         0 *         2 *         1 *         0 * 105.85574 *
+ *       16 *        24 *         0 *         2 *         1 *         0 * 107.73904 *
+ * unica coppia compton
+ *
+ *       17 *        25 *         1 *         1 *         1 *         0 * 93.452529 *
+ *       18 *        25 *         1 *         1 *         1 *         1 * 93.679504 *
+ *       19 *        25 *         1 *         1 *         1 *         2 * 93.836738 *
+ *       20 *        25 *         7 *         2 *         0 *         1 * -93.80313 *
+ *       21 *        25 *         7 *         2 *         0 *         1 * -96.04290 *
+ *
+ *       22 *        27 *         8 *         1 *         0 *         1 * -34.67410 *
+ *
+ *       23 *        30 *         3 *         1 *         1 *         0 * -21.99345 *
+ *       24 *        30 *         3 *         1 *         2 *         0 * -21.85355 *
+ *       25 *        30 *         3 *         1 *         2 *         0 * -21.34117 *
+ *       26 *        30 *         9 *         2 *         0 *         0 *  22.45331 *
+ *
+ */
 
 
 int main()
@@ -103,8 +103,20 @@ int main()
     bool scatterEnergy = 1;
     bool axisCone = 1;
 
-    const auto fileName = "filtered_file4.root"; //"Tesi_NN_0.root";
-    const auto treeName = "filteredHits"; //"Hits;-32768";
+    const char* fileName;
+    const char* treeName;
+
+    if(filter)
+    {
+        fileName = "Tesi_NN_0.root";
+        treeName = "Hits;-32768";
+    }
+    else
+    {
+        fileName = "filtered_file4.root";
+        treeName = "filteredHits";
+    }
+
 
     Analysis ansys(filter, analyze, scatterHisto, scatterEnergy, axisCone);
     ansys.Run(fileName, treeName);

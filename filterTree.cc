@@ -10,19 +10,16 @@
 #include <string>
 #include <map>
 
-void filterTree()
+void filterTree(const char* inputF, const char* outputF)
 {
-    TFile *inputFile = new TFile("filteredFinal.root", "READ");
+    TFile *inputFile = new TFile(inputF, "READ");
     TTree *inputtree = (TTree*)inputFile->Get("filteredPhoton");
 
     // Create the output file (it will overwrite the file if it exists)
-    TFile* outputFile = new TFile("output.root", "RECREATE");
+    TFile* outputFile = new TFile(outputF, "RECREATE");
 
     // Clone the tree structure (this copies the branches and the structure)
     TTree* outputtree = inputtree->CloneTree(0);
-
-    // std::unique_ptr<TFile> outputFile( TFile::Open("output.root", "UPDATE") );
-    // auto outputtree = outputFile->Get<TTree>("filteredPhoton");
 
     // Branches
     float in_posX;
@@ -40,7 +37,7 @@ void filterTree()
     int in_nCrystalCompton;
     int in_nCrystalRayleigh;
 
-    char in_processName;
+    char in_processName[15];
 
     int myin_eventID;
 
@@ -60,128 +57,142 @@ void filterTree()
     inputtree->SetBranchAddress("nCrystalRayleigh", &in_nCrystalRayleigh);
     inputtree->SetBranchAddress("processName", &in_processName);
 
-    // Counters
     Long64_t iEntry = 0;
-    Long64_t iEntry2 = 0;
+    Long64_t nEntries = inputtree->GetEntries(); // 27561311
 
-    bool alreadyFilled = 0;
-
-    Long64_t nEntries = inputtree->GetEntries();
-
-    // std::cout <<nEntries << std::endl;
+    //Enable branches
     inputtree->SetBranchStatus("*",0);
     inputtree->SetBranchStatus("eventID",1);
     inputtree->SetBranchStatus("processName",1);
 
-    while (iEntry < 1000)
+    while (iEntry < nEntries)
     {
         inputtree->GetEntry(iEntry);
 
-        // std::cout << iEntry << std::endl;
-
         myin_eventID = in_eventID;
 
-        // if(iEntry > 0)
-        // {
-            if(in_processName=='c')
+        if(iEntry==122 || iEntry==125)
+        {
+            std::cout << "Prima dei cicli: " << in_processName << ", " <<in_eventID << std::endl;
+        }
+
+        if(iEntry==nEntries-1)
+        {
+            std::cout << "Ultimo valore: " << in_processName << ", " <<in_eventID << std::endl;
+        }
+
+        if(in_processName[0]=='c')
+        {
+            if(iEntry==122 || iEntry==125 || iEntry==nEntries-1)
             {
+                std::cout << "dentro if \'c\' the first hit: " << in_processName << ", " <<in_eventID << std::endl;
+            }
+
+            inputtree->GetEntry(iEntry+1);
+
+            if(in_processName[0]=='p' && myin_eventID==in_eventID)
+            {
+
+                if(iEntry==122 || iEntry==125|| iEntry==nEntries-1)
+                {
+                    std::cout << "dentro if \'p\' the second hit: " << in_processName << ", " <<in_eventID << std::endl;
+                }
+
+                inputtree->SetBranchStatus("*",1);
+
+                inputtree->GetEntry(iEntry);
+                outputtree->Fill();
+
                 inputtree->GetEntry(iEntry+1);
+                outputtree->Fill();
 
-                if(in_processName=='p' && myin_eventID==in_eventID)
-                {
+                inputtree->SetBranchStatus("*",0);
+                inputtree->SetBranchStatus("eventID",1);
+                inputtree->SetBranchStatus("processName",1);
 
-                    inputtree->SetBranchStatus("*",1);
-                    // inputtree->SetBranchStatus("eventID",1);
-                    // inputtree->SetBranchStatus("processName",1);
-                    inputtree->GetEntry(iEntry);
-                    outputtree->Fill();
-                    // outputtree->Write("",TObject::kOverwrite);
-
-                    inputtree->GetEntry(iEntry+1);
-                    outputtree->Fill();
-
-                    inputtree->SetBranchStatus("*",0);
-                    inputtree->SetBranchStatus("eventID",1);
-                    inputtree->SetBranchStatus("processName",1);
-
-                    // std::cout << iEntry << std::endl;
-
-                    iEntry++;
-                }
-                else
-                {
-                    bool a=0;
-                    while(a==0)
-                    {
-
-                        iEntry++;
-
-                        inputtree->GetEntry(iEntry);
-                        if (in_eventID!=myin_eventID)
-                        {
-                            a = 1;
-                        }
-                    }
-                }
+                iEntry++;
             }
             else
             {
-                int b=0;
+                if(iEntry==122 || iEntry==125 || iEntry==nEntries-1)
+                {
+                    std::cout << "dentro else (not \'p\' the second hit): " << in_processName << ", " <<in_eventID << std::endl;
+                }
 
-                while(b==0)
+                bool a=0;
+                while(a==0)
                 {
                     iEntry++;
+                    if(iEntry >= nEntries)
+                    {
+                        break;
+                    }
 
                     inputtree->GetEntry(iEntry);
+
                     if (in_eventID!=myin_eventID)
                     {
-                        b = 1;
+                        a = 1;
                     }
                 }
             }
+        }
+        else
+        {
+            int c = 0;
+            if(iEntry==122 || iEntry==125 || iEntry==nEntries-1)
+            {
+                std::cout << "dentro else (not \'c\' the first hit): " << in_processName << ", " <<in_eventID << std::endl;
+                c = 1;
+            }
+
+            int b=0;
+
+            while(b==0)
+            {
+                iEntry++;
+                if(iEntry >= nEntries)
+                {
+                    break;
+                }
+
+                inputtree->GetEntry(iEntry);
+
+                if (in_eventID!=myin_eventID)
+                {
+                    b = 1;
+                }
+            }
+
+            if(c==1)
+            {
+                std::cout << "dopo while->prossimo evento: " << in_processName << ", " <<in_eventID << ", " << iEntry << std::endl;
+                c=0;
+            }
+        }
     }
-        // else
-        // {
-        //     if(in_processName=='c')
-        //     {
-        //         inputtree->GetEntry(iEntry+1);
-        //     }
-        // }
-        outputtree->Write("",TObject::kOverwrite);
-        outputFile->Close();
 
-        delete outputFile;
-}
-
-
-
-
-void createEmptyRootFile() {
-    // Apri il file esistente
-    TFile *inputFile = new TFile("filteredFinal.root", "READ");
-    TTree *tree = (TTree*)inputFile->Get("filteredPhoton"); // Sostituisci con il nome effettivo del TTree
-
-    // Crea il nuovo file
-    TFile *outputFile = new TFile("output.root", "RECREATE");
-    TTree *newTree = tree->CloneTree(0); // Copia solo la struttura senza dati
-
-    // Salva il nuovo file
-    newTree->Write();
+    std::cout << "Fine" << std::endl;
+    outputtree->Write("",TObject::kOverwrite);
     outputFile->Close();
     inputFile->Close();
 
-    delete inputFile;
     delete outputFile;
+    delete inputFile;
+
+
 }
 
 
 
-int main()
+int main(int argc, char* argv[])
 {
     ROOT::EnableImplicitMT(16); // multi-threading
 
-    // createEmptyRootFile();
-    filterTree();
+    const char* inputF = argv[1];
+    const char* outputF = argv[2];
+
+    filterTree(inputF, outputF);
 
     return 0;
 }

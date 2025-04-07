@@ -1,4 +1,4 @@
-// $Id: Analysis.hh 6 2025-3-15 martelli $
+// $Id: Analysis.hh 7 2025-4-7 martelli $
 /**
  * @file
  * @brief Analysis
@@ -68,7 +68,7 @@ public:
 private:
 
     // this function takes in the energy deposit by the scattered 511 and returns its scatter angle by reversing Compton formula
-    float betaAngle (float &energydeposit, int &count1, int &count2, int &count3, int &countNaN);
+    float betaAngle (float &energydeposit, int &countNaN);
 
     // It returns the norm of a vector
     float norm (float &x1, float &y1, float &z1);
@@ -82,7 +82,7 @@ private:
     float sigmaPhiCone (float &dx, float &dy, float &dz);
 
 
-    void thisEvent(float &x1, float &y1, float &z1, float &x2, float &y2, float &z2, float &locx1, float &locy1, float &locz1, float &locx2, float &locy2, float &locz2, float &edep1, float &edep2, int &crysID1, int &crysID2, int &count1, int &count2, int &count3, int &countNaN, int &countDiff);
+    void thisEvent(float &x1, float &y1, float &z1, float &x2, float &y2, float &z2, float &locx1, float &locy1, float &locz1, float &locx2, float &locy2, float &locz2, float &edep1, float &edep2, int &crysID1, int &crysID2, int &countNaN, int &countDiff, int &countNaNPhi1, int &countNaNPhi2);
 
     // Booleans
     bool doFilter, doAnalyze, doScatterHisto, doScatterEnergy, doAxisCone;
@@ -121,8 +121,6 @@ private:
 
     // Counters
     Long64_t iEntry;
-    Long64_t iEntry2;
-    Long64_t iEntry3;
 
     // ROOT objects
     TFile *f;
@@ -138,19 +136,33 @@ private:
     TH2D *hScatterEnergy2 = nullptr;
     TH2D *hScatterEnergy3 = nullptr;
     TH2D *hScatterEnergy4 = nullptr;
+    TH2D *hScatterEnergy5 = nullptr;
+    TH2D *hScatterEnergy6 = nullptr;
 
     TH2D *hAxisThetaPhi = nullptr;
     TH2D *hAxisBetaPhi = nullptr;
     TH2D *hAxisBetaTheta = nullptr;
+    TH2D *hAxisBetaThetaOg = nullptr;
+    TH2D *hAxisPhiGamma = nullptr;
+    TH2D *hAxisPhiATan2 = nullptr;
+
+
     TH1D *hAxisDifference = nullptr;
+    TH1D *hAxisDifferenceOg = nullptr;
     TH1D *hThetaAngle = nullptr;
+    TH1D *hThetaAngleOg = nullptr;
     TH1D *hPhiAngle = nullptr;
+    TH1D *hGammaAngle = nullptr;
+    TH1D *hAlfaAngle = nullptr;
+
+    TH1D *hPhiATan2 = nullptr;
 
     TH1D *hEnergy0 =  nullptr;
     TH1D *hEnergy1 =  nullptr;
     TH1D *hEnergy2 =  nullptr;
     TH1D *hEnergy3 =  nullptr;
 
+    TH1D *hEnergySpectrum = nullptr;
 };
 
 #endif

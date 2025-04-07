@@ -1,8 +1,6 @@
 #include <TFile.h>
 #include <TTree.h>
 
-// command to compile:  g++ -o copyTree copyTree.cc `root-config --cflags --libs`;
-
 void createEmptyRootFile() {
     // Apri il file esistente
     TFile *inputFile = new TFile("filteredFinal.root", "READ");

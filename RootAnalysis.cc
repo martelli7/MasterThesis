@@ -46,7 +46,7 @@
  * const std::vector<Float_t>& posY,
  * const std::vector<Float_t>& posZ) {
  *
- * root [6]  tree->Scan("eventID:rsectorID:photonID:nCrystalCompton:nCrystalRayleigh:posX")
+ * root [6]  tree->Scan("eventID:rsectorID:photonID:processName:nCrystalCompton:nCrystalRayleigh:posX")
  ************************************************************************************
  *    Row   *   eventID * rsectorID *  photonID * nCrystalC * nCrystalR *      posX *
  ************************************************************************************
@@ -92,7 +92,7 @@
  */
 
 
-int main()
+int main(int argc, char* argv[])
 {
 
     ROOT::EnableImplicitMT(); // multi-threading
@@ -103,19 +103,8 @@ int main()
     bool scatterEnergy = 1;
     bool axisCone = 1;
 
-    const char* fileName;
-    const char* treeName;
-
-    if(filter)
-    {
-        fileName = "Tesi_NN_0.root";
-        treeName = "Hits;-32768";
-    }
-    else
-    {
-        fileName = "filtered_file4.root";
-        treeName = "filteredHits";
-    }
+    const char* fileName = argv[1];
+    const char* treeName = "filteredPhoton";
 
 
     Analysis ansys(filter, analyze, scatterHisto, scatterEnergy, axisCone);
